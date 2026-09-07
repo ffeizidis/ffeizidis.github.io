@@ -39,15 +39,26 @@
                            the small x-height and the long Greek words earn */
   --fs-small: 0.9375rem;
 
-  /* colour — warm paper, not white */
-  --bg:    #fbfaf7;
+  /* colour — warm paper, never white */
+  --bg:    #faf8f2;
   --ink:   #1c1b18;
   --muted: #6b675e;
-  --rule:  #d9d5cc;
+  --rule:  #ddd8cc;
 }
 
+/* Three theme states. The media query is guarded so that an explicit light
+   choice still wins on a dark-set OS, and the [data-theme] rules come last so
+   the toggle overrides the system preference in both directions. */
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c; }
+  :root:not([data-theme="light"]) {
+    --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c;
+}
+:root[data-theme="light"] {
+  --bg: #faf8f2; --ink: #1c1b18; --muted: #6b675e; --rule: #ddd8cc;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -99,6 +110,23 @@ body {
   text-decoration: none;
 }
 .colophon a:hover { color: var(--ink); }
+
+.colophon { display: flex; align-items: baseline; gap: 1.25rem; }
+
+/* Starts hidden and is revealed by script: with no JS it would do nothing. */
+#theme-toggle {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+}
+#theme-toggle:hover { color: var(--ink); }
+#theme-toggle:focus-visible { outline: 1px solid var(--rule); outline-offset: 3px; }
 
 /* ── the reading column ──────────────────────────────────────────────────── */
 

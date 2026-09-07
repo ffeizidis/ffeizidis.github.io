@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% if title %}{{ title }} — {% endif %}{{ site.mark }}</title>
 {% if description %}<meta name="description" content="{{ description }}">{% endif %}
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/{{ face | default('eb-garamond') }}-greek-wght-normal.woff2" crossorigin>
 <link rel="stylesheet" href="/css/fonts.css">
@@ -22,8 +23,25 @@
 
   <footer class="colophon">
     <a href="/about/">Σχετικά</a>
+    <button id="theme-toggle" type="button" hidden aria-label="Εναλλαγή θέματος" title="Εναλλαγή θέματος">◐</button>
   </footer>
 
 </div>
+
+<script>
+(function () {
+  var b = document.getElementById('theme-toggle');
+  if (!b) return;
+  b.hidden = false;                       // only useful once script has run
+  b.addEventListener('click', function () {
+    var d = document.documentElement;
+    var current = d.dataset.theme ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = current === 'dark' ? 'light' : 'dark';
+    d.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>

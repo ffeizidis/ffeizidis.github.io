@@ -29,7 +29,13 @@ margin beside their reference. Both margins are floats with a negative margin,
 so they take no width from the text column.
 
 `[^1]` footnotes are converted to inline sidenotes at build time by
-`lib/markdown-it-sidenotes.js` — the published pages ship no JavaScript at all.
+`lib/markdown-it-sidenotes.js`, so the layout itself needs no JavaScript.
+
+The only script on the page is the theme toggle: a few lines in `<head>` that
+apply a stored choice before first paint, and a listener that flips it. The
+button is `hidden` in the markup and revealed by that script, so with
+JavaScript off it does not appear and the site simply follows the operating
+system's light/dark preference.
 
 Before changing `src/css/type.css`, read the invariants comment at the top of it.
 Three ordinary-looking CSS changes will silently break the margins.
