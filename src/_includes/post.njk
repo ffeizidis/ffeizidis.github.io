@@ -1,0 +1,12 @@
+---
+layout: base.njk
+---
+<article>
+  <header class="head">
+    <h1>{{ title }}</h1>
+    <p class="stamp"><time datetime="{{ page.date | iso }}">{{ page.date | stamp }}</time></p>
+  </header>
+  <div class="prose">
+    {{ content | safe }}
+  </div>
+</article>

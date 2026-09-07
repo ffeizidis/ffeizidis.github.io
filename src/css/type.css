@@ -1,0 +1,276 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAYOUT INVARIANTS — read before editing.
+
+   Both margin zones are floats with a negative margin equal to their own width
+   plus the gutter, so they sit entirely outside the text column and steal no
+   width from it. Three things will silently break that:
+
+   1. Nothing between a float and `.prose` may establish a block formatting
+      context. `clear` only sees floats in the *same* BFC, so the moment a <p>,
+      <blockquote> or <li> gets `overflow` (other than visible), `display:
+      flow-root|grid|flex|inline-block`, `contain`, `column-count` or
+      `position: absolute`, sidenotes stop clearing each other and overlap.
+   2. No right-side inset on any block in `.prose` — no `margin-right`,
+      `padding-right` or `border-right`. A float's negative margin is measured
+      from its containing block's right content edge, so a right-inset
+      blockquote throws its note out of alignment. Indent on the left only.
+   3. No `overflow: hidden` or `clip` on html, body, .page or .prose. That clips
+      both margins away. Horizontal overflow is prevented by the breakpoints
+      below, never by clipping.
+
+   Breakpoints are in rem so that 400% zoom collapses the zones (WCAG 1.4.10).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* geometry */
+  --measure:  37rem;
+  --side-w:    9rem;   /* left margin: section headings */
+  --note-w:   13rem;   /* right margin: sidenotes */
+  --gutter: 2.25rem;
+  --edge:    1.5rem;
+
+  /* type */
+  --face: "EB Garamond Variable", Georgia, serif;
+
+  /* 21px: EB Garamond has a small x-height and needs the upper part of
+     Butterick's 15–25px screen range to read at the same apparent size. */
+  --fs-body: 1.3125rem;
+  --lh-body: 1.46;      /* 146% — a shade over Butterick's 145% ceiling, which
+                           the small x-height and the long Greek words earn */
+  --fs-small: 0.9375rem;
+
+  /* colour — warm paper, not white */
+  --bg:    #fbfaf7;
+  --ink:   #1c1b18;
+  --muted: #6b675e;
+  --rule:  #d9d5cc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--face);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-variant-numeric: oldstyle-nums;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  /* Ragged right, never justified: Greek hyphenation dictionaries are not
+     reliably present, and unhyphenated justified Greek rivers badly. */
+  text-align: left;
+  hyphens: manual;
+}
+
+.page {
+  max-width: calc(var(--side-w) + var(--gutter) + var(--measure) + var(--gutter) + var(--note-w));
+  margin-inline: auto;
+  padding: 3.5rem var(--edge) 6rem;
+}
+
+/* ── chrome ──────────────────────────────────────────────────────────────── */
+
+.masthead {
+  font-size: var(--fs-small);
+  margin-bottom: 4.5rem;
+}
+.masthead a { color: var(--muted); text-decoration: none; }
+.masthead a:hover { color: var(--ink); }
+
+.colophon {
+  margin-top: 6rem;
+  font-size: var(--fs-small);
+}
+.colophon a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.colophon a:hover { color: var(--ink); }
+
+/* ── the reading column ──────────────────────────────────────────────────── */
+
+.head, .prose, .index {
+  max-width: var(--measure);
+  margin-left: calc(var(--side-w) + var(--gutter));
+}
+
+/* .prose is the shared block formatting context that every float lives in.
+   flow-root contains them for height without clipping their negative margins. */
+.prose { display: flow-root; }
+
+.head h1 {
+  font-size: 1.85em;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  margin: 0;
+  text-wrap: balance;
+}
+.head { margin-bottom: 3rem; }          /* not on .stamp: the About page has none */
+.head .stamp { margin: 0.5rem 0 0; }
+
+.stamp {
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--muted);
+}
+
+.prose p { margin: 0 0 0.85em; text-wrap: pretty; }
+
+.prose a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.14em;
+           text-decoration-color: var(--rule); }
+.prose a:hover { text-decoration-color: currentColor; }
+
+.prose em { font-style: italic; }
+.prose strong { font-weight: 600; }
+
+/* Block quotations: indented on the LEFT ONLY — invariant 2. */
+.prose blockquote {
+  margin: 1.4em 0 1.4em 1.75rem;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+}
+.prose blockquote p { margin-bottom: 0.55em; }
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+.prose ul, .prose ol { padding-left: 1.4em; padding-right: 0; margin: 1.1em 0; }
+.prose li { margin-bottom: 0.35em; }
+
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5em 0; width: 6rem; }
+
+.prose img { max-width: 100%; height: auto; }
+.prose figure { clear: both; margin: 2em 0; }
+
+/* ── left margin: section headings ───────────────────────────────────────── */
+
+.prose > h2, .prose > h3 {
+  float: left;
+  clear: left;                 /* without this a second heading is placed beside
+                                  the first, i.e. inside the text column */
+  width: var(--side-w);
+  margin: 0.33em 0 0 calc(-1 * (var(--side-w) + var(--gutter)));
+  font-size: var(--fs-small);
+  line-height: 1.25;
+  font-weight: 600;
+  text-align: right;           /* hard edge faces the text, rag faces the gutter */
+  text-wrap: balance;
+  hyphens: none;
+  letter-spacing: 0;           /* never track Greek */
+  color: var(--muted);
+}
+.prose > h3 { font-weight: 400; font-style: italic; }
+
+/* ── right margin: sidenotes ─────────────────────────────────────────────── */
+
+/* A <span>, not an <aside>: `aside` is in the HTML parser's "close any open <p>"
+   set, so an inline <aside> would split the paragraph and destroy the float's
+   line-level anchoring. See lib/markdown-it-sidenotes.js. */
+.prose .sidenote {
+  display: block;
+  float: right;
+  clear: right;                /* stacks notes; they drift, they never overlap */
+  width: var(--note-w);
+  margin: 0 calc(-1 * (var(--note-w) + var(--gutter))) 0.9rem 0;
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  text-align: left;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;     /* bare URLs */
+}
+.prose .sn-p { display: block; }
+.prose .sn-num + .sn-p { display: inline; }      /* run on from the number */
+.prose .sn-p + .sn-p { margin-top: 0.5em; }
+.prose .sn-num { color: var(--muted); font-variant-numeric: oldstyle-nums; }
+
+/* Raised manually rather than via font-variant-position: not every one of these
+   faces carries a `sups` feature, and where it is missing the property silently
+   renders a full-size digit sitting in the text. line-height: 0 keeps the raised
+   figure from opening up the line it sits on. */
+.prose .sn-ref {
+  font-size: 0.68em;
+  line-height: 0;
+  vertical-align: 0.45em;
+  color: var(--muted);
+  font-variant-numeric: lining-nums;
+  margin-left: 0.06em;
+}
+
+/* A note inside a heading would be placed relative to the heading's own float
+   box and land in the text column. Suppress it; the plugin warns. */
+.prose :is(h2, h3) .sidenote { display: none; }
+
+/* ── the index ───────────────────────────────────────────────────────────── */
+
+.index { list-style: none; padding: 0; margin-top: 0; }
+.index li {
+  font-size: 1.06em;
+  display: grid;
+  grid-template-columns: var(--side-w) 1fr;
+  column-gap: var(--gutter);
+  margin-left: calc(-1 * (var(--side-w) + var(--gutter)));
+  padding: 0.45em 0;
+  align-items: baseline;
+}
+.index .stamp { text-align: right; }
+.index a { color: inherit; text-decoration: none; }
+.index a:hover { text-decoration: underline; text-decoration-color: var(--rule);
+                 text-underline-offset: 0.14em; }
+
+/* ── collapse ────────────────────────────────────────────────────────────── */
+
+/* Drop the note column first: it is the wider of the two. Setting --note-w to 0
+   neutralises the negative margin arithmetically. */
+@media (max-width: 76rem) {
+  :root { --note-w: 0rem; }
+  .prose .sidenote {
+    float: none; clear: none; width: auto;
+    margin: 0.75rem 0;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--rule);
+  }
+}
+
+/* Then the heading gutter. */
+@media (max-width: 54rem) {
+  :root { --side-w: 0rem; }
+  .head, .prose, .index { margin-left: 0; }
+  .prose > h2, .prose > h3 {
+    float: none; clear: none; width: auto;
+    margin: 1.9em 0 0.4em;
+    text-align: left;
+    font-size: 1.0625rem;
+    color: var(--ink);
+  }
+  .prose > h3 { font-size: 1rem; }
+  .index li { grid-template-columns: 1fr; margin-left: 0; column-gap: 0; padding: 0.55em 0; }
+  .index .stamp { text-align: left; }
+}
+
+@media (max-width: 32rem) {
+  :root { --fs-body: 1.125rem; --edge: 1.15rem; }
+  .page { padding-top: 2.5rem; }
+  .masthead { margin-bottom: 3rem; }
+}
+
+/* ── print ───────────────────────────────────────────────────────────────── */
+
+@media print {
+  :root { --bg: #fff; --ink: #000; --note-w: 0rem; --side-w: 0rem; }
+  .masthead, .colophon { display: none; }
+  .head, .prose, .index { margin-left: 0; max-width: none; }
+  .prose .sidenote {
+    float: none; clear: none; width: auto; margin: 0.6rem 0;
+    padding-left: 0.9rem; border-left: 1px solid #999;
+  }
+  .prose > h2, .prose > h3 { float: none; width: auto; margin: 1.5em 0 0.4em; text-align: left; }
+  .prose .sidenote a::after { content: " (" attr(href) ")"; word-break: break-all; }
+}
