@@ -1,4 +1,4 @@
-# zenfeedbacker.github.io
+# ffeizidis.github.io
 
 A small static site: a list of posts and an about page. Built with
 [Eleventy](https://www.11ty.dev/), deployed to GitHub Pages by Actions on every
