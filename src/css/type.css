@@ -40,10 +40,10 @@
   --fs-small: 0.9375rem;
 
   /* colour — warm paper, never white */
-  --bg:    #faf8f2;
+  --bg:    #f4efe3;
   --ink:   #1c1b18;
   --muted: #6b675e;
-  --rule:  #ddd8cc;
+  --rule:  #d8d1bf;
 }
 
 /* Three theme states. The media query is guarded so that an explicit light
@@ -58,7 +58,7 @@
   --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c;
 }
 :root[data-theme="light"] {
-  --bg: #faf8f2; --ink: #1c1b18; --muted: #6b675e; --rule: #ddd8cc;
+  --bg: #f4efe3; --ink: #1c1b18; --muted: #6b675e; --rule: #d8d1bf;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -89,7 +89,13 @@ body {
 
 /* ── chrome ──────────────────────────────────────────────────────────────── */
 
-.masthead { margin-bottom: 4.5rem; }
+.masthead {
+  margin-bottom: 4.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
 .masthead a {
   color: var(--ink);
   text-decoration: none;
@@ -111,9 +117,9 @@ body {
 }
 .colophon a:hover { color: var(--ink); }
 
-.colophon { display: flex; align-items: baseline; gap: 1.25rem; }
-
-/* Starts hidden and is revealed by script: with no JS it would do nothing. */
+/* Sits at the top right of the page, opposite the mark. Starts hidden and is
+   revealed by script: with no JS it would do nothing. The top margin drops it
+   onto the mark's x-height rather than its ascender line. */
 #theme-toggle {
   appearance: none;
   background: none;
@@ -123,7 +129,10 @@ body {
   font: inherit;
   color: var(--muted);
   cursor: pointer;
+  font-size: 1.125rem;
   line-height: 1;
+  margin-top: 1.05rem;
+  flex: none;
 }
 #theme-toggle:hover { color: var(--ink); }
 #theme-toggle:focus-visible { outline: 1px solid var(--rule); outline-offset: 3px; }
