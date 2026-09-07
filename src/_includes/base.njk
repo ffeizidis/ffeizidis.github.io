@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% if title %}{{ title }} — {% endif %}{{ site.title }}</title>
+<title>{% if title %}{{ title }} — {% endif %}{{ site.mark }}</title>
 {% if description %}<meta name="description" content="{{ description }}">{% endif %}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/{{ face | default('eb-garamond') }}-greek-wght-normal.woff2" crossorigin>
@@ -15,7 +15,7 @@
 <div class="page">
 
   <header class="masthead">
-    <a href="/" aria-label="{{ site.title }}">ff</a>
+    <a href="/" aria-label="{{ site.title }}">{{ site.mark }}</a>
   </header>
 
   {{ content | safe }}
