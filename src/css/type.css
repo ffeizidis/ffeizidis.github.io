@@ -84,7 +84,7 @@ body {
   text-decoration: none;
   /* two f's, left to EB Garamond's liga to fuse into a single ff */
   font-variant-ligatures: common-ligatures discretionary-ligatures;
-  font-size: 2.1rem;
+  font-size: 3.15rem;
   line-height: 1;
   display: inline-block;
 }
