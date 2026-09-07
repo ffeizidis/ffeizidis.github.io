@@ -78,12 +78,17 @@ body {
 
 /* ── chrome ──────────────────────────────────────────────────────────────── */
 
-.masthead {
-  font-size: var(--fs-small);
-  margin-bottom: 4.5rem;
+.masthead { margin-bottom: 4.5rem; }
+.masthead a {
+  color: var(--ink);
+  text-decoration: none;
+  /* two f's, left to EB Garamond's liga to fuse into a single ff */
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
+  font-size: 1.75rem;
+  line-height: 1;
+  display: inline-block;
 }
-.masthead a { color: var(--muted); text-decoration: none; }
-.masthead a:hover { color: var(--ink); }
+.masthead a:hover { color: var(--muted); }
 
 .colophon {
   margin-top: 6rem;
