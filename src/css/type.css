@@ -161,7 +161,7 @@ body {
   text-wrap: balance;
 }
 .head { margin-bottom: 3rem; }
-.head.ruled { border-top: 1px solid var(--rule); padding-top: 1.4rem; }          /* not on .stamp: the About page has none */
+.head.ruled { border-top: 1px solid var(--ink); padding-top: 1.4rem; }          /* not on .stamp: the About page has none */
 .head .stamp { margin: 0.5rem 0 0; }
 
 .stamp {
@@ -263,15 +263,14 @@ body {
   margin-bottom: 0;
   text-align: right;
   line-height: 1;
+  color: var(--ink);
 }
 .tombstone::after {
   content: "";
   display: inline-block;
-  width: 0.6em;
-  height: 0.6em;
-  background: var(--muted);
-  print-color-adjust: exact;
-  -webkit-print-color-adjust: exact;
+  width: 0.62em;
+  height: 0.62em;
+  border: 1px solid currentColor;
 }
 
 /* ── the index ───────────────────────────────────────────────────────────── */
