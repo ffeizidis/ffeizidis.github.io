@@ -16,15 +16,14 @@
 <div class="page">
 
   <header class="masthead">
-    <a href="/" aria-label="{{ site.title }}">{{ site.mark }}</a>
-    <button id="theme-toggle" type="button" hidden aria-label="Εναλλαγή θέματος" title="Εναλλαγή θέματος">◐</button>
+    <a class="mark" href="/" aria-label="{{ site.title }}">{{ site.mark }}</a>
+    <nav class="mast-right">
+      <a href="/about/">about</a>
+      <button id="theme-toggle" type="button" hidden aria-label="Εναλλαγή θέματος" title="Εναλλαγή θέματος">◐</button>
+    </nav>
   </header>
 
   {{ content | safe }}
-
-  <footer class="colophon">
-    <a href="/about/">Σχετικά</a>
-  </footer>
 
 </div>
 

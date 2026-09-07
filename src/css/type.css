@@ -96,7 +96,7 @@ body {
   justify-content: space-between;
   gap: 1.5rem;
 }
-.masthead a {
+.masthead .mark {
   color: var(--ink);
   text-decoration: none;
   /* two f's, left to EB Garamond's liga to fuse into a single ff */
@@ -105,21 +105,26 @@ body {
   line-height: 1;
   display: inline-block;
 }
-.masthead a:hover { color: var(--muted); }
+.masthead .mark:hover { color: var(--muted); }
 
-.colophon {
-  margin-top: 6rem;
-  font-size: 1.125rem;
+/* "about" and the switch, together at the top right, opposite the mark. The top
+   margin drops the pair onto the mark's x-height, not its ascender line. */
+.mast-right {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  margin-top: 1.05rem;
+  flex: none;
 }
-.colophon a {
+.mast-right a {
   color: var(--muted);
   text-decoration: none;
+  font-size: 1.125rem;
+  line-height: 1;
 }
-.colophon a:hover { color: var(--ink); }
+.mast-right a:hover { color: var(--ink); }
 
-/* Sits at the top right of the page, opposite the mark. Starts hidden and is
-   revealed by script: with no JS it would do nothing. The top margin drops it
-   onto the mark's x-height rather than its ascender line. */
+/* Starts hidden and is revealed by script: with no JS it would do nothing. */
 #theme-toggle {
   appearance: none;
   background: none;
@@ -131,7 +136,6 @@ body {
   cursor: pointer;
   font-size: 1.125rem;
   line-height: 1;
-  margin-top: 1.05rem;
   flex: none;
 }
 #theme-toggle:hover { color: var(--ink); }
@@ -139,7 +143,7 @@ body {
 
 /* ── the reading column ──────────────────────────────────────────────────── */
 
-.head, .prose, .index {
+.head, .prose, .index, .tombstone {
   max-width: var(--measure);
   margin-left: calc(var(--side-w) + var(--gutter));
 }
@@ -156,7 +160,8 @@ body {
   margin: 0;
   text-wrap: balance;
 }
-.head { margin-bottom: 3rem; }          /* not on .stamp: the About page has none */
+.head { margin-bottom: 3rem; }
+.head.ruled { border-top: 1px solid var(--rule); padding-top: 1.4rem; }          /* not on .stamp: the About page has none */
 .head .stamp { margin: 0.5rem 0 0; }
 
 .stamp {
@@ -181,7 +186,7 @@ body {
   border: 0;
   color: var(--ink);
 }
-.prose blockquote p { margin-bottom: 0.55em; }
+.prose blockquote p { margin-bottom: 0.85em; }   /* as between body paragraphs */
 .prose blockquote p:last-child { margin-bottom: 0; }
 
 .prose ul, .prose ol { padding-left: 1.4em; padding-right: 0; margin: 1.1em 0; }
@@ -250,6 +255,25 @@ body {
    box and land in the text column. Suppress it; the plugin warns. */
 .prose :is(h2, h3) .sidenote { display: none; }
 
+/* Drawn rather than set: U+220E is absent from EB Garamond and from most serif
+   fallbacks, so a real glyph would arrive from whatever font the reader happens
+   to have — often full-width CJK. A box is the same square everywhere. */
+.tombstone {
+  margin-top: 2.5rem;
+  margin-bottom: 0;
+  text-align: right;
+  line-height: 1;
+}
+.tombstone::after {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  background: var(--muted);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
 /* ── the index ───────────────────────────────────────────────────────────── */
 
 .index { list-style: none; padding: 0; margin-top: 0; }
@@ -284,7 +308,7 @@ body {
 /* Then the heading gutter. */
 @media (max-width: 54rem) {
   :root { --side-w: 0rem; }
-  .head, .prose, .index { margin-left: 0; }
+  .head, .prose, .index, .tombstone { margin-left: 0; }
   .prose > h2, .prose > h3 {
     float: none; clear: none; width: auto;
     margin: 1.9em 0 0.4em;
@@ -307,8 +331,8 @@ body {
 
 @media print {
   :root { --bg: #fff; --ink: #000; --note-w: 0rem; --side-w: 0rem; }
-  .masthead, .colophon { display: none; }
-  .head, .prose, .index { margin-left: 0; max-width: none; }
+  .masthead { display: none; }
+  .head, .prose, .index, .tombstone { margin-left: 0; max-width: none; }
   .prose .sidenote {
     float: none; clear: none; width: auto; margin: 0.6rem 0;
     padding-left: 0.9rem; border-left: 1px solid #999;
