@@ -26,6 +26,7 @@ export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
 
   eleventyConfig.addPassthroughCopy({ "src/css": "css", "src/fonts": "fonts" });
+  eleventyConfig.addPassthroughCopy("src/favicon.svg");
 
   // Bare numeral dates: 06.09.2026
   eleventyConfig.addFilter("stamp", (d) => {
