@@ -118,6 +118,9 @@ http://localhost:8080/<slug>/) and confirm:
    layout itself ships no JavaScript; nothing a post adds should either.
 5. Greek accents and `«»` survived, and any bare `www.` URL became a link.
 
+Close the browser window when the check is done — `browser_close` if it was
+driven with Playwright — and delete the screenshots and `.playwright-mcp/`.
+
 ## 4. Deploy
 
     git add -A && git commit && git push
