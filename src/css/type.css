@@ -44,6 +44,7 @@
   --ink:   #1c1b18;
   --muted: #6b675e;
   --rule:  #d8d1bf;
+  --link:  #d8d1bf;    /* underlines; brighter than --rule in the dark */
 }
 
 /* Three theme states. The media query is guarded so that an explicit light
@@ -51,14 +52,14 @@
    the toggle overrides the system preference in both directions. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c;
+    --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c; --link: #5a554b;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c;
+  --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c; --link: #5a554b;
 }
 :root[data-theme="light"] {
-  --bg: #f4efe3; --ink: #1c1b18; --muted: #6b675e; --rule: #d8d1bf;
+  --bg: #f4efe3; --ink: #1c1b18; --muted: #6b675e; --rule: #d8d1bf; --link: #d8d1bf;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -88,7 +89,7 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.14em;
-  text-decoration-color: var(--rule);
+  text-decoration-color: var(--link);
 }
 a:hover { text-decoration-color: currentColor; }
 
@@ -149,13 +150,28 @@ a:hover { text-decoration-color: currentColor; }
   flex: none;
 }
 #theme-toggle:hover { color: var(--ink); }
-/* The glyph names the mode the press leads to: a sun in the dark. Same three
-   states as the palette above. */
-#theme-toggle::before { content: "◐"; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) #theme-toggle::before { content: "☀\FE0E"; }
+/* The icon names the mode a press leads to: a sun in the dark, a half-moon
+   otherwise. Drawn, not set: ◐ and ☀ come from different fallback fonts on
+   every system and never agree on size or baseline. A mask lets the shape
+   take the button's colour. Same three states as the palette above. */
+#theme-toggle::before {
+  content: "";
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  vertical-align: -0.11em;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+  --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='9.5' fill='none' stroke='black' stroke-width='2'/><path d='M12 2.5a9.5 9.5 0 0 0 0 19z' fill='black'/></svg>");
 }
-:root[data-theme="dark"] #theme-toggle::before { content: "☀\FE0E"; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #theme-toggle::before { --icon: var(--sun); }
+}
+:root[data-theme="dark"] #theme-toggle::before { --icon: var(--sun); }
+#theme-toggle {
+  --sun: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='5' fill='black'/><path d='M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5M4.6 4.6l2.5 2.5M16.9 16.9l2.5 2.5M4.6 19.4l2.5-2.5M16.9 7.1l2.5-2.5' stroke='black' stroke-width='2.3' stroke-linecap='round'/></svg>");
+}
 #theme-toggle:focus-visible { outline: 1px solid var(--rule); outline-offset: 3px; }
 
 /* ── the reading column ──────────────────────────────────────────────────── */
