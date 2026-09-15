@@ -44,7 +44,7 @@
   --ink:   #1c1b18;
   --muted: #6b675e;
   --rule:  #d8d1bf;
-  --link:  #d8d1bf;    /* underlines; brighter than --rule in the dark */
+  --link:  #b9b09a;    /* underlines; a step past --rule in both themes */
 }
 
 /* Three theme states. The media query is guarded so that an explicit light
@@ -59,7 +59,7 @@
   --bg: #161513; --ink: #e6e2da; --muted: #948f85; --rule: #35322c; --link: #5a554b;
 }
 :root[data-theme="light"] {
-  --bg: #f4efe3; --ink: #1c1b18; --muted: #6b675e; --rule: #d8d1bf; --link: #d8d1bf;
+  --bg: #f4efe3; --ink: #1c1b18; --muted: #6b675e; --rule: #d8d1bf; --link: #b9b09a;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
