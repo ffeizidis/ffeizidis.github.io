@@ -8,8 +8,8 @@
 <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/{{ face | default('eb-garamond') }}-greek-wght-normal.woff2" crossorigin>
-<link rel="stylesheet" href="/css/fonts.css">
-<link rel="stylesheet" href="/css/type.css">
+<link rel="stylesheet" href="/css/fonts.css?v={{ buildId }}">
+<link rel="stylesheet" href="/css/type.css?v={{ buildId }}">
 <link rel="alternate" type="application/atom+xml" title="{{ site.mark }}" href="/feed.xml">
 </head>
 <body>
@@ -19,7 +19,7 @@
     <a class="mark" href="/" aria-label="{{ site.title }}">{{ site.mark }}</a>
     <nav class="mast-right">
       <a href="/about/">about</a>
-      <button id="theme-toggle" type="button" hidden aria-label="Εναλλαγή θέματος" title="Εναλλαγή θέματος">◐</button>
+      <button id="theme-toggle" type="button" hidden aria-label="Εναλλαγή θέματος" title="Εναλλαγή θέματος"></button>
     </nav>
   </header>
 

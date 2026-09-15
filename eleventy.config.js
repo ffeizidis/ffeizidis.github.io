@@ -4,6 +4,10 @@ import attrs from "markdown-it-attrs";
 import sidenotes from "./lib/markdown-it-sidenotes.js";
 
 export default function (eleventyConfig) {
+  // Stamped onto the stylesheet URLs so a deploy is never hidden behind a
+  // cached copy: GitHub Pages sends max-age=600 and browsers keep it longer.
+  eleventyConfig.addGlobalData("buildId", () => Date.now().toString(36));
+
   const md = markdownIt({
     html: true,
     linkify: true,      // footnote 3 is a schemeless www. URL

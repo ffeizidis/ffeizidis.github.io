@@ -149,6 +149,13 @@ a:hover { text-decoration-color: currentColor; }
   flex: none;
 }
 #theme-toggle:hover { color: var(--ink); }
+/* The glyph names the mode the press leads to: a sun in the dark. Same three
+   states as the palette above. */
+#theme-toggle::before { content: "◐"; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #theme-toggle::before { content: "☀\FE0E"; }
+}
+:root[data-theme="dark"] #theme-toggle::before { content: "☀\FE0E"; }
 #theme-toggle:focus-visible { outline: 1px solid var(--rule); outline-offset: 3px; }
 
 /* ── the reading column ──────────────────────────────────────────────────── */
